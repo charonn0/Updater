@@ -488,6 +488,7 @@ End
 		    ProgressBar2.Maximum = i
 		    SocketMode = Mode_Downloading
 		    GetTimer.Mode = Timer.ModeSingle
+		    PushButton1.Caption = "Cancel"
 		    Me.ShowModal
 		    
 		  Else
@@ -621,6 +622,7 @@ End
 		  ElseIf Me.Caption = "Cancel" Then
 		    If MsgBox("Abort update?", 52, "A download is in progress") = 6 Then
 		      Self.Reset()
+		      Self.Close
 		    End If
 		  End If
 		End Sub
