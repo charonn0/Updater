@@ -1,0 +1,1 @@
+{  "Version":1.2,  "BaseURL":"http:\/\/www.example.com\/updates\/",  "files":[    "Patch1.exe",    "Patch2.exe",    "Patch3.exe",    "Patch4.exe"  ]}
