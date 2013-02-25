@@ -527,8 +527,8 @@ End
 	#tag EndMethod
 
 
-	#tag Property, Flags = &h21
-		Private BaseAddress As String
+	#tag Property, Flags = &h0
+		BaseAddress As String
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
@@ -539,32 +539,32 @@ End
 		Private CurrentFile As String
 	#tag EndProperty
 
-	#tag Property, Flags = &h21
-		Private CurrentVersion As Double
+	#tag Property, Flags = &h0
+		CurrentVersion As Double
 	#tag EndProperty
 
-	#tag Property, Flags = &h21
-		Private DownloadDirectory As FolderItem
+	#tag Property, Flags = &h0
+		DownloadDirectory As FolderItem
 	#tag EndProperty
 
-	#tag Property, Flags = &h21
-		Private Failed() As String
+	#tag Property, Flags = &h0
+		Failed() As String
 	#tag EndProperty
 
-	#tag Property, Flags = &h21
-		Private Files() As String
+	#tag Property, Flags = &h0
+		Files() As String
 	#tag EndProperty
 
-	#tag Property, Flags = &h21
-		Private Icon As Picture
+	#tag Property, Flags = &h0
+		Icon As Picture
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
 		Private LastMS As UInt64
 	#tag EndProperty
 
-	#tag Property, Flags = &h21
-		Private LatestVersion As Double
+	#tag Property, Flags = &h0
+		LatestVersion As Double
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
@@ -575,12 +575,12 @@ End
 		Private TempFile As FolderItem
 	#tag EndProperty
 
-	#tag Property, Flags = &h21
-		Private UpdateAddress As String
+	#tag Property, Flags = &h0
+		UpdateAddress As String
 	#tag EndProperty
 
-	#tag Property, Flags = &h21
-		Private UpdateInfo As JSONItem
+	#tag Property, Flags = &h0
+		UpdateInfo As JSONItem
 	#tag EndProperty
 
 

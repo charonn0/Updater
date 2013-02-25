@@ -800,6 +800,40 @@ Begin Window JSONGenerator
       Visible         =   True
       Width           =   80
    End
+   Begin Label Label4
+      AutoDeactivate  =   True
+      Bold            =   ""
+      DataField       =   ""
+      DataSource      =   ""
+      Enabled         =   True
+      Height          =   503
+      HelpTag         =   ""
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Italic          =   ""
+      Left            =   617
+      LockBottom      =   ""
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   ""
+      LockTop         =   True
+      Multiline       =   True
+      Scope           =   0
+      Selectable      =   False
+      TabIndex        =   25
+      TabPanelIndex   =   0
+      Text            =   "To edit or generate an update file, run the project and use the editor. To test a newly generated or loaded file, click the RunTest button.\r\n\r\nThe Runtest button calls UpdateWindow.RunUpdate with the update filedata. RunUpdate skips the update check stage.\r\n\r\nTo see a live demo which includes an update check, click the Live Demo button.\r\n\r\nThe Live Demo button calls UpdateWindow.CheckNow with the URL of a test update file. The test file references two 10MB files (empty test files from two CDNs).\r\n\r\nBoth CheckNow and RunUpdate return a folderitem pointing to the temporary folder the files were downloaded to. If the returned folderitem is NIL then there are no update files (due to error/cancelation by user/no new versions available.)"
+      TextAlign       =   0
+      TextColor       =   &h000000
+      TextFont        =   "System"
+      TextSize        =   0
+      TextUnit        =   0
+      Top             =   -23
+      Transparent     =   False
+      Underline       =   ""
+      Visible         =   True
+      Width           =   526
+   End
 End
 #tag EndWindow
 
