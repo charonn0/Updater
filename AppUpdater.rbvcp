@@ -2,7 +2,6 @@ Type=Desktop
 RBProjectVersion=2011.043
 MinIDEVersion=20070100
 Class=App;App.rbbas;&h10D8C7FF;&h0;false
-Window=Window1;Window1.rbfrm;&h7945C7FF;&h0;false
 BuildSteps=Build Automation;Build Automation.rbbas;&h2BDC77FF;&h0;false
 Window=UpdateWindow;UpdateWindow.rbfrm;&h3507AFFF;&h0;false
 Window=JSONGenerator;JSONGenerator.rbfrm;&h7D9FAFFF;&h0;false
