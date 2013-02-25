@@ -433,7 +433,7 @@ End
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
-		Private Sub Reset()
+		Private Sub Reset(Error As Boolean = False)
 		  Sock.Close
 		  If DownloadDirectory <> Nil Then
 		    For i As Integer = DownloadDirectory.Count DownTo 1
@@ -442,19 +442,29 @@ End
 		    DownloadDirectory.Delete
 		  End If
 		  DownloadDirectory = Nil
-		  UpdateInfo = Nil
-		  Self.Icon = Nil
-		  BaseAddress = ""
-		  ReDim Files(-1)
-		  SocketMode = Mode_Checking
-		  TempFile = Nil
-		  ProgressBar1.Value = 0
-		  ProgressBar2.Value = 0
-		  PushButton1.Enabled = True
-		  PushButton1.Caption = "Check"
-		  CurrentAction.Text = ""
-		  Status.Text = "Ready"
-		  Status.TextColor = OKColor
+		  If Not Error Then
+		    UpdateInfo = Nil
+		    Self.Icon = Nil
+		    BaseAddress = ""
+		    ReDim Files(-1)
+		    SocketMode = Mode_Checking
+		    TempFile = Nil
+		    ProgressBar1.Value = 0
+		    ProgressBar2.Value = 0
+		    PushButton1.Enabled = True
+		    PushButton1.Caption = "Check"
+		    CurrentAction.Text = ""
+		    Status.Text = "Ready"
+		    Status.TextColor = OKColor
+		  Else
+		    SocketMode = Mode_Error
+		    PushButton1.Enabled = True
+		    PushButton1.Caption = "Check"
+		    CurrentAction.Text = "Error while downloading"
+		    Status.Text = "Download error (" + Format(ProgressBar2.Value, "###,##0") + "/" + Format(ProgressBar2.Maximum, "###,##0") + ")"
+		    Status.TextColor = ErrorColor
+		  End If
+		  GetTimer.Mode = Timer.ModeOff
 		End Sub
 	#tag EndMethod
 
@@ -538,6 +548,10 @@ End
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
+		Private Failed() As String
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
 		Private Files() As String
 	#tag EndProperty
 
@@ -579,6 +593,9 @@ End
 	#tag Constant, Name = Mode_Downloading, Type = Double, Dynamic = False, Default = \"1", Scope = Private
 	#tag EndConstant
 
+	#tag Constant, Name = Mode_Error, Type = Double, Dynamic = False, Default = \"2", Scope = Private
+	#tag EndConstant
+
 	#tag Constant, Name = NetColor, Type = Color, Dynamic = False, Default = \"&c0000FF00", Scope = Private
 	#tag EndConstant
 
@@ -613,18 +630,18 @@ End
 	#tag Event
 		Sub ReceiveProgress(bytesReceived as integer, totalBytes as integer, newData as string)
 		  #pragma Unused newData
-		  'Status.Text = "Receiving data..."
-		  'Status.TextColor = NetColor
-		  Dim url As String = BaseAddress + CurrentFile
-		  If url.Trim <> "" Then
-		    CurrentAction.Text = "Getting " + Shorten(url)
-		  Else
-		    CurrentAction.Text = ""
+		  If SocketMode <> Mode_Error Then
+		    Dim url As String = BaseAddress + CurrentFile
+		    If url.Trim <> "" Then
+		      CurrentAction.Text = "Getting " + Shorten(url)
+		    Else
+		      CurrentAction.Text = ""
+		    End If
+		    Status.Text = "Downloading update package (" + Format(ProgressBar2.Value, "###,##0") + "/" + Format(ProgressBar2.Maximum, "###,##0") + ")"
+		    Status.TextColor = NetColor
+		    ProgressBar1.Value = bytesReceived * 100 / totalBytes
+		    BytesDownloaded = BytesDownloaded + bytesReceived
 		  End If
-		  Status.Text = "Downloading update package (" + Format(ProgressBar2.Value, "###,##0") + "/" + Format(ProgressBar2.Maximum, "###,##0") + ")"
-		  Status.TextColor = NetColor
-		  ProgressBar1.Value = bytesReceived * 100 / totalBytes
-		  BytesDownloaded = BytesDownloaded + bytesReceived
 		End Sub
 	#tag EndEvent
 	#tag Event
@@ -683,10 +700,22 @@ End
 	#tag EndEvent
 	#tag Event
 		Sub HeadersReceived(headers as internetHeaders, httpStatus as integer)
-		  #pragma Unused httpStatus
-		  #pragma Unused headers
-		  ProgressBar1.Value = 0
-		  CurrentAction.Text = "Data incoming..."
+		  Select Case httpStatus
+		  Case 200
+		    ProgressBar1.Value = 0
+		    CurrentAction.Text = "Data incoming..."
+		  Case 301, 302
+		    ProgressBar1.Value = 0
+		    CurrentAction.Text = "Following redirect..."
+		    Me.Get(headers.CommaSeparatedValues("Location"))
+		  Else
+		    Reset(True)
+		    Status.Text = "File skipped: HTTP error " + Str(httpStatus)
+		    Status.TextColor = ErrorColor
+		    CurrentAction.Text = "Error while downloading."
+		    
+		    
+		  End Select
 		  
 		End Sub
 	#tag EndEvent

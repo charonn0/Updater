@@ -918,7 +918,7 @@ End
 		    
 		    Dim i As Integer
 		    For i = 0 To items.Count - 1
-		      Dim name As String = items(i) 
+		      Dim name As String = items(i)
 		      Listbox1.AddRow(name)
 		      Listbox1.CellType(Listbox1.LastIndex, 0) = Listbox.TypeEditable
 		    Next
@@ -1150,7 +1150,7 @@ End
 #tag Events PushButton6
 	#tag Event
 		Sub Action()
-		  #pragma BreakOnExceptions Off
+		  '#pragma BreakOnExceptions Off
 		  If TextArea1.Text.Trim <> "" Then
 		    Dim js As New JSONItem(TextArea1.Text)
 		    Dim UpWin As New UpdateWindow
