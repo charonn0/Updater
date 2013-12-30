@@ -27,7 +27,7 @@ Begin Window UpdateWindow
    Begin ProgressBar ProgressBar1
       AutoDeactivate  =   True
       Enabled         =   True
-      Height          =   10
+      Height          =   18
       HelpTag         =   ""
       Index           =   -2147483648
       InitialParent   =   ""
@@ -331,6 +331,79 @@ Begin Window UpdateWindow
       Top             =   80
       Width           =   32
    End
+   Begin Listbox PackageList
+      AutoDeactivate  =   True
+      AutoHideScrollbars=   True
+      Bold            =   ""
+      Border          =   True
+      ColumnCount     =   2
+      ColumnsResizable=   ""
+      ColumnWidths    =   "75%,*"
+      DataField       =   ""
+      DataSource      =   ""
+      DefaultRowHeight=   -1
+      Enabled         =   True
+      EnableDrag      =   ""
+      EnableDragReorder=   ""
+      GridLinesHorizontal=   0
+      GridLinesVertical=   0
+      HasHeading      =   True
+      HeadingIndex    =   -1
+      Height          =   100
+      HelpTag         =   ""
+      Hierarchical    =   ""
+      Index           =   -2147483648
+      InitialParent   =   ""
+      InitialValue    =   "Package	Status"
+      Italic          =   ""
+      Left            =   8
+      LockBottom      =   ""
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   ""
+      LockTop         =   True
+      RequiresSelection=   ""
+      Scope           =   0
+      ScrollbarHorizontal=   ""
+      ScrollBarVertical=   True
+      SelectionType   =   0
+      TabIndex        =   7
+      TabPanelIndex   =   0
+      TabStop         =   True
+      TextFont        =   "System"
+      TextSize        =   0
+      TextUnit        =   0
+      Top             =   124
+      Underline       =   ""
+      UseFocusRing    =   True
+      Visible         =   True
+      Width           =   401
+      _ScrollWidth    =   -1
+   End
+   Begin DisclosureTriangle DisclosureTriangle1
+      AcceptFocus     =   False
+      AutoDeactivate  =   True
+      Enabled         =   True
+      Facing          =   0
+      Height          =   18
+      HelpTag         =   ""
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Left            =   8
+      LockBottom      =   ""
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   ""
+      LockTop         =   True
+      Scope           =   0
+      TabIndex        =   8
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Top             =   90
+      Value           =   False
+      Visible         =   True
+      Width           =   18
+   End
 End
 #tag EndWindow
 
@@ -433,6 +506,17 @@ End
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
+		Private Sub PopulateList()
+		  PackageList.DeleteAllRows
+		  For i As Integer = 0 To UBound(Files)
+		    Dim name As String = NthField(files(i), "/", CountFields(files(i), "/"))
+		    PackageList.AddRow(BaseAddress + files(i), "Waiting")
+		    PackageList.RowTag(PackageList.LastIndex) = files(i)
+		  Next
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
 		Private Sub Reset(Error As Boolean = False)
 		  Sock.Close
 		  If DownloadDirectory <> Nil Then
@@ -485,6 +569,7 @@ End
 		    For i = 0 To items.Count - 1
 		      Files.Append(items(i))
 		    Next
+		    PopulateList()
 		    ProgressBar2.Maximum = i
 		    SocketMode = Mode_Downloading
 		    GetTimer.Mode = Timer.ModeSingle
@@ -669,6 +754,7 @@ End
 		        For i = 0 To items.Count - 1
 		          Files.Append(items(i))
 		        Next
+		        PopulateList()
 		        ProgressBar2.Maximum = i
 		        SocketMode = Mode_Downloading
 		        GetTimer.Mode = Timer.ModeSingle
@@ -768,12 +854,18 @@ End
 		    Me.Mode = Me.ModeOff
 		    If MsgBox("Download complete. Would you like to apply this update now?", 36, "An update is ready to be applied.") = 6 Then
 		      Self.Close
+		      Return
 		    Else
 		      Self.Reset()
 		      Status.Text = "Upgrade was cancelled."
 		      Status.TextColor = ErrorColor
 		      PushButton1.Caption = "Check"
 		    End If
+		    For i As Integer = 0 To PackageList.LastIndex
+		      If PackageList.Cell(i, 1) = "Downloading" Then
+		        PackageList.Cell(i, 1) = "Done"
+		      End If
+		    Next
 		    Return
 		  End If
 		  
@@ -783,6 +875,13 @@ End
 		  TempFile.Name = NthField(CurrentFile, "/", CountFields(CurrentFile, "/"))
 		  ProgressBar2.Value = ProgressBar2.Value + 1
 		  Dim url As String = BaseAddress + CurrentFile
+		  For i As Integer = 0 To PackageList.LastIndex
+		    If CurrentFile = PackageList.RowTag(i) Then
+		      PackageList.Cell(i, 1) = "Downloading"
+		    ElseIf PackageList.Cell(i, 1) = "Downloading" Then
+		      PackageList.Cell(i, 1) = "Done"
+		    End If
+		  Next
 		  Sock.Get(url)
 		End Sub
 	#tag EndEvent
@@ -809,6 +908,17 @@ End
 		  CurrentAction1.Text = FormatBytes(BytesDownloaded / seconds) + "/s"
 		  LastMS = Microseconds
 		  BytesDownloaded = 0
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events DisclosureTriangle1
+	#tag Event
+		Sub Action()
+		  If Me.Value Then
+		    Self.Height = 233
+		  Else
+		    Self.Height = 114
+		  End If
 		End Sub
 	#tag EndEvent
 #tag EndEvents
