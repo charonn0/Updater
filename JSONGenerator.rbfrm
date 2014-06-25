@@ -1243,7 +1243,7 @@ End
 	#tag Event
 		Sub Action()
 		  Dim UpWin As New UpdateWindow
-		  Dim upgrade As FolderItem = UpWin.CheckNow("www.boredomsoft.com/updates/myapp.json", 1.0)
+		  Dim upgrade As FolderItem = UpWin.CheckNow("www.boredomsoft.org/updates/myapp.json", 1.0)
 		  If upgrade <> Nil Then
 		    MsgBox("Upgrade saved to: " + upgrade.AbsolutePath)
 		    For i As Integer = upgrade.Count DownTo 1
