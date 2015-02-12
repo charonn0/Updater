@@ -1,3 +1,5 @@
+Note: For the purposes of this license importing one or more licensed files into a project shall be considered equivalent to dynamically linking against the files, rather than incorporating them. i.e. The open-source requirements of this license will not automatically apply to projects which import the file(s), but always and only to modifications made to the file(s). 
+
                    GNU LESSER GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
 
